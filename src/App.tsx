@@ -166,7 +166,6 @@ function isMobile() {
  */
 function settings() {
   const main = document.getElementById('main')!
-  const tempc = colour;
   main.classList.remove('center')
   const send = (
     <><style>
