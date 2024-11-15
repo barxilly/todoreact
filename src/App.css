@@ -1,0 +1,176 @@
+body {
+    overflow: hidden;
+}
+
+#logo {
+    user-select: none;
+    cursor: pointer;
+}
+
+.settingsbtn {
+    position: absolute !important;
+    right: 1em;
+    top: 1em;
+    background-color: transparent !important;
+}
+
+.settingsbtn:hover {
+    background-color: transparent !important;
+}
+
+.settingsicon {
+    color: #aaa !important;
+    font-size: 1.5em !important;
+}
+
+.settingsicon:hover {
+    color: #777 !important;
+}
+
+#main {
+    transition: all 0.5s ease-in-out;
+}
+
+#titlink {
+    color: #aaa;
+    text-decoration: none;
+}
+
+#rocket {
+    width: 20vh;
+    height: 20vh;
+    color: #aaa;
+    align-self: center;
+}
+
+.todocard {
+    height: 3em !important;
+    padding: 0 !important;
+    cursor: pointer;
+    box-shadow: 0px 10px 24px -10px rgba(0, 0, 0, 0.25) !important;
+    transition: all 0.1s ease-in-out;
+    user-select: none;
+    margin-bottom: 1em;
+}
+
+#intitle,
+#indesc,
+#indate {
+    margin-bottom: 0.5em;
+}
+
+.newbutt {
+    position: absolute !important;
+    bottom: 1em;
+    right: 1em;
+    width: 4em !important;
+    height: 4em !important;
+    border-radius: 50% !important;
+}
+
+.rembutt {
+    position: absolute !important;
+    bottom: 1em;
+    right: 6em;
+    width: 4em !important;
+    height: 4em !important;
+    border-radius: 50% !important;
+    background-color: rgba(255, 0, 0, 0.637) !important;
+}
+
+.rembutt:hover {
+    background-color: rgba(255, 0, 0, 0.833) !important;
+}
+
+#inbutt {
+    width: 100%;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    vertical-align: middle;
+}
+
+.todocard:hover {
+    box-shadow: 0px 10px 24px -7px rgba(0, 0, 0, 0.25) !important;
+    transform: scale(1.02);
+}
+
+.todotitle {
+    font-size: 1em;
+    margin-top: 0.6em;
+    margin-left: 0.5em;
+}
+
+#titlink {
+    cursor: pointer;
+    user-select: none;
+}
+
+#titlink:hover {
+    color: #555;
+    text-decoration: underline !important;
+}
+
+.completed {
+    opacity: 0.5;
+}
+
+.shake {
+    animation: shake 0.5s;
+}
+
+ ::-webkit-scrollbar {
+    width: 0.5em;
+}
+
+ ::-webkit-scrollbar-track {
+    background: #ffffff00;
+}
+
+ ::-webkit-scrollbar-thumb {
+    background: #00000033;
+}
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: #00000066;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(1px, 1px) rotate(0deg);
+    }
+    10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+    }
+    20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+    }
+    30% {
+        transform: translate(3px, 2px) rotate(0deg);
+    }
+    40% {
+        transform: translate(1px, -1px) rotate(1deg);
+    }
+    50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+    }
+    60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+    }
+    70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+    }
+    80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+    }
+    90% {
+        transform: translate(1px, 2px) rotate(0deg);
+    }
+    100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+    }
+}
