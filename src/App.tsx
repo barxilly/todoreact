@@ -1,4 +1,4 @@
-import { Card, AppShell, Center, Image, Stack, Text, MantineProvider, ActionIcon, TextInput, Button, Checkbox, Popover, Skeleton, Loader, useMantineColorScheme } from '@mantine/core'
+import { Card, AppShell, Center, Image, Stack, Text, MantineProvider, ActionIcon, TextInput, Button, Checkbox, Popover, Skeleton, Loader, useMantineColorScheme, ColorInput } from '@mantine/core'
 import './App.css'
 import { createRoot, Root } from 'react-dom/client'
 import { FaPlus, FaRocket, FaTrash } from "react-icons/fa6";
@@ -6,6 +6,9 @@ let root: Root | null = null
 import { useState, useEffect } from 'react';
 import { DateInput } from '@mantine/dates';
 import { FaCog } from 'react-icons/fa';
+
+let soundsOn = true;
+let colour = localStorage.getItem('colour') || '#e3a7ec';
 
 function App() {
   const [isPopoverOpen, setPopoverOpen] = useState(false);
@@ -24,10 +27,10 @@ function App() {
     <>
       <style id="theme">
         {`:root {
-          --mantine-color-blue-filled: #e3a7ec !important;
-          --mantine-color-blue-filled-hover: #c086c9 !important;
-          --mantine-color-dark-filled: #e3a7ec !important;
-          --mantine-color-dark-filled-hover: #c086c9 !important;
+          --mantine-color-blue-filled: ${colour}dd !important;
+          --mantine-color-blue-filled-hover: ${colour}ff !important;
+          --mantine-color-dark-filled: ${colour}dd !important;
+          --mantine-color-dark-filled-hover: ${colour}ff !important;
       }`}
       </style>
       <div id="pre">
@@ -42,10 +45,10 @@ function App() {
           >
             <AppShell.Header>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
-                <Text id="logo" style={{ fontFamily: 'Sour Gummy, sans-serif', fontWeight: 700, marginLeft: '0.5em', marginTop: '0.1em', fontSize: '2em' }} onClick={async () => { const o = new Audio('./sounds/o.wav'); await o.play(); window.location.reload(); }}>
+                <Text id="logo" style={{ fontFamily: 'Sour Gummy, sans-serif', fontWeight: 700, marginLeft: '0.5em', marginTop: '0.1em', fontSize: '2em' }} onClick={async () => { const o = new Audio('./sounds/o.wav'); if (soundsOn) await o.play(); window.location.reload(); }}>
                   To-Do React
                 </Text>
-                <Text id="titlink" size="sm" style={{ fontFamily: 'sans-serif', fontWeight: 'normal', marginTop: '0.4em', color: '#777' }} onClick={() => { const o = new Audio('./sounds/o.wav'); o.play(); window.open('https://benjs.uk', '_blank'); }}>
+                <Text id="titlink" size="sm" style={{ fontFamily: 'sans-serif', fontWeight: 'normal', marginTop: '0.4em', color: '#777' }} onClick={() => { const o = new Audio('./sounds/o.wav'); if (soundsOn) o.play(); window.open('https://benjs.uk', '_blank'); }}>
                   @benjs.uk
                 </Text>
               </div>
@@ -81,14 +84,14 @@ function App() {
           >
             <AppShell.Header>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5em' }}>
-                <Text id="logo" style={{ fontFamily: 'Sour Gummy, sans-serif', fontWeight: 700, marginLeft: '0.5em', marginTop: '0.1em', fontSize: '2em' }} onClick={async () => { const o = new Audio('./sounds/o.wav'); await o.play(); window.location.reload(); }}>
+                <Text id="logo" style={{ fontFamily: 'Sour Gummy, sans-serif', fontWeight: 700, marginLeft: '0.5em', marginTop: '0.1em', fontSize: '2em' }} onClick={async () => { const o = new Audio('./sounds/o.wav'); if (soundsOn) await o.play(); window.location.reload(); }}>
                   To-Do React
                 </Text>
-                <Text id="titlink" size="sm" style={{ fontFamily: 'sans-serif', fontWeight: 'normal', marginTop: '0.4em', color: '#777' }} onClick={() => { const o = new Audio('./sounds/o.wav'); o.play(); window.open('https://benjs.uk', '_blank'); }}>
+                <Text id="titlink" size="sm" style={{ fontFamily: 'sans-serif', fontWeight: 'normal', marginTop: '0.4em', color: '#777' }} onClick={() => { const o = new Audio('./sounds/o.wav'); if (soundsOn) o.play(); window.open('https://benjs.uk', '_blank'); }}>
                   @benjs.uk
                 </Text>
               </div>
-              <ActionIcon id="settingsbtn" className='settingsbtn' onClick={() => { const a = new Audio('./sounds/a.wav'); a.play(); settings(); }}>
+              <ActionIcon id="settingsbtn" className='settingsbtn' onClick={() => { const a = new Audio('./sounds/a.wav'); if (soundsOn) a.play(); settings(); }}>
                 <FaCog className='settingsicon' />
               </ActionIcon>
             </AppShell.Header>
@@ -158,8 +161,12 @@ function isMobile() {
   }
 }
 
+/**
+ * Shows settings
+ */
 function settings() {
   const main = document.getElementById('main')!
+  const tempc = colour;
   main.classList.remove('center')
   const send = (
     <><style>
@@ -181,15 +188,40 @@ function settings() {
           margin-top: 0.6em;
           margin-left: 0.5em;
         }
-          .chb {
-            margin-top: 0.5em;
-            margin-bottom: 0.5em;
-            margin-left: 0.5em;
-          }
+        .chb {
+          margin-top: 0.5em;
+          margin-bottom: 0.5em;
+          margin-left: 0.5em;
+        }
+        #col {
+          margin-top: 0.5em;
+          margin-bottom: 0.5em;
+        }
       `}
     </style><MantineProvider>
         <h2 className='pgtodotitle'>Settings</h2>
-        <Checkbox className='chb' label="Enable sounds" checked={true} onChange={() => { }} />
+        <Checkbox id="souch" className='chb' defaultChecked={soundsOn} label="Enable sounds" onChange={() => { toggleSounds(); }} />
+        <ColorInput
+          id="col"
+          label="Theme"
+          defaultValue={colour}
+          onChange={(e) => {
+            const s = new Audio('./sounds/s.wav');
+            if (soundsOn) s.play();
+            colour = e;
+            const theme = document.getElementById('theme')! as HTMLStyleElement;
+            theme.innerHTML = `
+            :root {
+              --mantine-color-blue-filled: ${colour}dd !important;
+              --mantine-color-blue-filled-hover: ${colour}ff !important;
+              --mantine-color-dark-filled: ${colour}dd !important;
+              --mantine-color-dark-filled-hover: ${colour}ff !important;
+            }
+            `;
+            localStorage.setItem('colour', colour);
+          }}
+        />
+
         <ActionIcon variant="filled" size="xl" radius="xl" aria-label="Settings" className='newbutt' onClick={newItem}>
           <FaPlus />
         </ActionIcon>
@@ -206,7 +238,7 @@ function settings() {
  */
 function newItem() {
   const n = new Audio('./sounds/n.wav');
-  n.play();
+  if (soundsOn) n.play();
   const main = document.getElementById('main')!
   main.classList.add('center')
   const pstyle = document.createElement('style');
@@ -240,11 +272,11 @@ function newItem() {
           const inputElement = document.getElementById('intitle') as HTMLInputElement;
           if (inputElement.value === '') {
             const e = new Audio('./sounds/e.wav');
-            e.play();
+            if (soundsOn) e.play();
             return;
           } else {
             const b = new Audio('./sounds/b.wav');
-            b.play();
+            if (soundsOn) b.play();
           }
         }}>
           Add
@@ -260,6 +292,14 @@ function newItem() {
   }
 
   root.render(form);
+}
+
+/** 
+ * Toggles sounds
+ */
+function toggleSounds() {
+  soundsOn = !soundsOn;
+  localStorage.setItem('sounds', JSON.stringify(soundsOn));
 }
 
 
@@ -360,12 +400,12 @@ function toggleCompleted(toDoItem: any) {
   loadPage(toDoItem);
   if (toDoItem.completed) {
     const d = new Audio('./sounds/d.wav');
-    d.play();
+    if (soundsOn) d.play();
     const card = document.getElementById(toDoItem.id)!;
     card.classList.add('completed');
   } else {
     const c = new Audio('./sounds/c.wav');
-    c.play();
+    if (soundsOn) c.play();
     const card = document.getElementById(toDoItem.id)!;
     card.classList.remove('completed');
   }
@@ -377,7 +417,7 @@ function toggleCompleted(toDoItem: any) {
 function loadPage(toDoItem: any) {
   // Play t.wav sound
   const audio = new Audio('./sounds/t.wav');
-  audio.play();
+  if (soundsOn) audio.play();
   const main = document.getElementById('main')!
   main.classList.remove('center')
   const send = (
@@ -409,7 +449,7 @@ function loadPage(toDoItem: any) {
       <ActionIcon variant="filled" size="xl" radius="xl" aria-label="Settings" className='newbutt' onClick={newItem}>
         <FaPlus />
       </ActionIcon>
-      <ActionIcon variant="filled" size="xl" radius="xl" aria-label="Remove" className='rembutt' onClick={() => { const r = new Audio('./sounds/r.wav'); r.play(); removeItem(toDoItem.id) }}>
+      <ActionIcon variant="filled" size="xl" radius="xl" aria-label="Remove" className='rembutt' onClick={() => { const r = new Audio('./sounds/r.wav'); if (soundsOn) r.play(); removeItem(toDoItem.id); }}>
         <FaTrash />
       </ActionIcon>
     </MantineProvider>
@@ -429,6 +469,13 @@ function loadPage(toDoItem: any) {
  * Loads the app
  */
 function load() {
+  // Check local storage for sounds
+  const localStorageSounds = localStorage.getItem('sounds')
+  if (localStorageSounds) {
+    soundsOn = JSON.parse(localStorageSounds)
+  } else {
+    localStorage.setItem('sounds', JSON.stringify(true))
+  }
 
   document.getElementById('content')!.style.display = 'none';
   setInterval(() => {
@@ -470,6 +517,15 @@ function load() {
           if (toDoItem.completed) {
             checkbox.checked = true;
           }
+        }
+      }
+      const souch = document.getElementById('souch')! as HTMLInputElement;
+
+      if (souch) {
+        if (soundsOn) {
+          souch.checked = true;
+        } else {
+          souch.checked = false;
         }
       }
       const popover = document.getElementsByClassName('mantine-Popover-dropdown')[0] as HTMLDivElement;
